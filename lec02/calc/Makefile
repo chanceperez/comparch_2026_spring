@@ -55,7 +55,7 @@ $(TEST_RESULT_DIR)/%.ok: $(TEST_DIR)/%.txt $(ANSWER_DIR)/%.txt $(TARGET)
 	@diff $@.out $(word 2,$^) > /dev/null || \
 		(echo "[FAIL] $* " && \
 		 echo "Expected vs Actual:" && \
-		 diff -u $(word 2,$^) $@.out && \
+		 diff $(word 2,$^) $@.out && \
 		 exit 1)
 	@touch $@
 	@echo "[PASS] $*"

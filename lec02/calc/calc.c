@@ -71,6 +71,8 @@ int main(int argc, char* argv[]) {
 	    switch(op) {
 	    case '+': result = result + next_number; break; // Summation
 	    case '*': result = result * next_number; break; // Multiplication
+	    case '&': result = result & next_number; break; // Bitwise And
+	    case '|': result = result | next_number; break; // Bitwise Or
 	    default:
 		// Question for students: What could be improved about this print statement?
 		printf("Received unsupported operator: %c\n", op);
