@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
 
   char buf[256];
   char* string = fgets(buf, 256, fp);
-  int number = ... ; // The starting number for the Collatz sequence
+  int number = atoi(string); // The starting number for the Collatz sequence
 
   /* ... */
 
@@ -20,6 +20,14 @@ int main(int argc, char* argv[]) {
   // %d is the format specifier for integer numbers.
   // \n is the newline character
   printf( "%d\n", number );
+  while(number > 1){
+    if(number % 2 == 0){
+      number /= 2;
+    } else {
+      number = 3 * number + 1;
+    }
+    printf( "%d\n", number );
+  }
 
   return EXIT_SUCCESS;
 }
