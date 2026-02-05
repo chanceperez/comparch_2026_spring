@@ -85,6 +85,9 @@ int main(int argc, char* argv[]) {
     printf("*((unsigned char*) pointer + 1)= %d\n", * ((unsigned char*) pointer + 1));
     printf("*((unsigned char*) pointer + 2)= %d\n", * ((unsigned char*) pointer + 2));
     printf("*((unsigned char*) pointer + 3)= %d\n", * ((unsigned char*) pointer + 3));
+    // To reconstruct a 32-bit integer N from its four bytes:
+    // N = b1*2^0 + b2*2^8 + b3*2^16 + b4*2^24,
+    // where b1 is the least significant byte and b4 is the most significant byte.
     printf("5th byte? w/o asan? endianness?\n"); // https://en.wikipedia.org/wiki/Endianness
     break;
   case 'g':
