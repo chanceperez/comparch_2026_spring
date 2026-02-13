@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-size_t min(size_t x, size_t y)
+size_t min(size_t x, size_t y) // MIN FUNCTION HERE!!!
 {
     return x < y ? x : y;
 }
@@ -33,9 +33,15 @@ size_t levenshtein_recursive(char *source, char *target)
         for (int y = 1; y <= tarlength; y++)
         {
             int weight = (source[x - 1] == target[y - 1]) ? 0 : 1; // if letters are equal, don't increase weight. Otherwise increase
-            // matrix[x][y] = [MINIMUM OF WEIGHT]
+
+            int insert = matrix[x - 1][y] + 1;
+            int delete = matrix[x][y - 1] + 1;
+            int substitute = matrix[x - 1][y - 1] + weight; // add weight if substitution needed / if letters are different
+
+            matrix[x][y] = min(min(insert, delete), substitute);
         }
     }
+    return matrix[srclength][tarlength];
 }
 
 int main(int argc, char *argv[])
