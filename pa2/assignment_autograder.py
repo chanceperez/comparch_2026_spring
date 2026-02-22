@@ -4,8 +4,8 @@ import sys
 from toHex import autograder as toHex_autograder
 from binSub import autograder as binSub_autograder
 # from anyToAny import autograder as anyToAny_autograder
-from fermiDirac import autograder as fermiDirac_autograder
-# from rootFinder import autograder as rootFinder_autograder
+# from fermiDirac import autograder as fermiDirac_autograder
+ from rootFinder import autograder as rootFinder_autograder
 from binToFloat import autograder as binToFloat_autograder
 from doubleToBin import autograder as doubleToBin_autograder
 from floatMul import autograder as floatMul_autograder
@@ -41,8 +41,8 @@ if len( sys.argv ) > 1:
     total += toHex_autograder.grade_toHex ( path="tar_test/toHex/", verbose=False )
     total += binSub_autograder.grade_binSub ( path="tar_test/binSub/", verbose=False )
 #     total += anyToAny_autograder.grade_anyToAny ( path="tar_test/anyToAny/", verbose=False )
-    total += fermiDirac_autograder.grade_fermiDirac ( path="tar_test/fermiDirac/", verbose=False )
-#     total += rootFinder_autograder.grade_rootFinder ( path="tar_test/rootFinder/", verbose=False )
+#     total += fermiDirac_autograder.grade_fermiDirac ( path="tar_test/fermiDirac/", verbose=False )
+    total += rootFinder_autograder.grade_rootFinder ( path="tar_test/rootFinder/", verbose=False )
     total += binToFloat_autograder.grade_binToFloat ( path="tar_test/binToFloat/", verbose=False )
     total += doubleToBin_autograder.grade_doubleToBin ( path="tar_test/doubleToBin/", verbose=False )
     total += floatMul_autograder.grade_floatMul ( path="tar_test/floatMul/", verbose=False )
@@ -54,8 +54,8 @@ else:
     total += toHex_autograder.grade_toHex ( path="toHex/", verbose=False )
     total += binSub_autograder.grade_binSub ( path="binSub/", verbose=False )
 #     total += anyToAny_autograder.grade_anyToAny ( path="anyToAny/", verbose=False )
-    total += fermiDirac_autograder.grade_fermiDirac ( path="fermiDirac/", verbose=False )
-#     total += rootFinder_autograder.grade_rootFinder ( path="rootFinder/", verbose=False )
+#     total += fermiDirac_autograder.grade_fermiDirac ( path="fermiDirac/", verbose=False )
+    total += rootFinder_autograder.grade_rootFinder ( path="rootFinder/", verbose=False )
     total += binToFloat_autograder.grade_binToFloat ( path="binToFloat/", verbose=False )
     total += doubleToBin_autograder.grade_doubleToBin ( path="doubleToBin/", verbose=False )
     total += floatMul_autograder.grade_floatMul ( path="floatMul/", verbose=False )

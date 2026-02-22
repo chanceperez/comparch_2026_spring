@@ -88,6 +88,10 @@ def test_greedyScheduling ( filenum, path="./", verbose=False ):
     except subprocess.CalledProcessError as e:
         print (e.output)
         print ("Calling ./greedyScheduling returned an error.")
+    except UnicodeDecodeError as e:
+        print ("UnicodeDecodeError:")
+        print (e)
+        print ("Consider examining your output formatting.")
     except ValueError as e:
         print (' '.join(result.args))
         print (result.stdout)
@@ -98,7 +102,7 @@ def test_greedyScheduling ( filenum, path="./", verbose=False ):
 
     return False
 
-def grade_greedyScheduling( path="./", verbose=False ):
+def grade_greedyScheduling( path="./", verbose=False, quick=True ):
 
     score = 0
 
@@ -109,7 +113,8 @@ def grade_greedyScheduling( path="./", verbose=False ):
         print ("Couldn't compile greedyScheduling.c.")
         return score
 
-    if test_greedyScheduling(0,path,verbose):
+
+    if quick and test_greedyScheduling(0,path,verbose):
         score += 5
         if test_greedyScheduling(1,path,verbose):
             score += 5
@@ -123,11 +128,20 @@ def grade_greedyScheduling( path="./", verbose=False ):
                         allPass &= test_greedyScheduling(filenum,path,verbose)
                     if allPass:
                         score+=5
+    else:
+        # quick==false, so generate 100 tests worth 1/2 a point each.
+        # greedyScheuling grades have a high variance when run repeatedly against the same person's code.
+        #     Run 100 times instead of 50 in hopes of the central limit theorem.
+        for filenum in range(100):
+            generate_test ( filenum, jobs=4, maxlength=4, timeslots=16, path=path )
+            if test_greedyScheduling(filenum, path, verbose):
+                score += 0.25
+                os.remove("{}answers/answer{}.txt".format(path,filenum))
+                os.remove("{}tests/test{}.txt".format(path,filenum))
 
     print ("Score on greedyScheduling: {} out of 25.".format(score))
     return score
 
 if __name__ == '__main__':
-    # generate_test_suite()
     grade_greedyScheduling(verbose=True)
     exit()
