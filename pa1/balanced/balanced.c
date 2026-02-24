@@ -17,6 +17,10 @@ struct element *push( // no stack capacity
     // char open, // not needed
     char close)
 {
+    struct element *newelm = malloc(sizeof(struct element)); // malloc returns pointer, need to make space for new element to define each trait
+    newelm->close = close;                                   // Note to self: a->b means (*a).b - it's SHORTHAND!
+    newelm->next = stack;                                    // reassigns head and points to rest of stack, kind of like a linked list
+    return newelm;
 }
 
 // Remove element from the top of the stack
@@ -25,11 +29,19 @@ char pop(struct element **stack) // needs stack as an argument, double pointer t
 
     if (*stack != NULL)
     {
-        char popped = (*stack)->close; // Note to self: *a->b means (**a).b - it's SHORTHAND!
+        char popped = (*stack)->close; //**stack.close = popped */
+
+        struct element *topcurrent = *stack;
+
+        *stack = (*stack)->next; // stack head becomes next element
+
+        free(topcurrent); // free should remove the top here
+
+        return popped;
     }
     else
     {
-        return '\0';
+        return '\0'; // empty stack
     }
 }
 
@@ -56,7 +68,7 @@ int main(int argc, char *argv[])
             root = push(root, '>'); // storing close bracket and matching with each case
             break;
         case '(':
-            root = push(root, ')');
+            root = push(root, ')'); // also have to reassign root otherwise the pushed element floats away into the aether
             break;
         case '[':
             root = push(root, ']');
