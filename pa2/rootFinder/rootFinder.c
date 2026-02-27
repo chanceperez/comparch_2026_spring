@@ -2,14 +2,17 @@
 #include <stdio.h>
 #include <float.h>
 
-double fabs (double value) {
-    return value<0.0 ? -value : value;
+double fabs(double value)
+{
+    return value < 0.0 ? -value : value;
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
 
-    FILE* fp = fopen(argv[1], "r");
-    if (!fp) {
+    FILE *fp = fopen(argv[1], "r");
+    if (!fp)
+    {
         perror("fopen failed");
         return EXIT_FAILURE;
     }
@@ -41,19 +44,38 @@ int main(int argc, char *argv[]) {
     // A straightfoward one for our purposes is a binary search along the number line.
     // You should review how the binary search algorithm works.
 
-    double guess_r_max = x<1.0 ? 1.0 : x; // Think: why is this the maximum guess?
-    double guess_r_min = 0.0;
-    double guess_r = /* ... */
+    double guess_r_max = x < 1.0 ? 1.0 : x; // Think: why is this the maximum guess? //because if the result is less than one r has to be less than one as well(?)
+    double guess_r_min = 0.0;               // lo
+    double guess_r = guess_r_max / 2;       // mid
 
-    double guess_r_old = guess_r;
+    // double guess_r_old = guess_r;
     double error = DBL_MAX;
 
-    while ( precision<fabs(error) ) {
-        /* ... */
+    while (precision < fabs(error))
+    {
+        guess_r = (guess_r_min + guess_r_max) / 2;
+        double result = 1.0;
+
+        for (int i = 0; i < n; i++)
+        {
+            result *= guess_r;
+        }
+        if (result < x)
+            guess_r_min = guess_r;
+        else if (result > x)
+        {
+            guess_r_max = guess_r;
+        }
+        error = result - x;
     }
 
-    printf("%f\n",guess_r); // print with default precision
+    printf("%f\n", guess_r); // print with default precision
 
     return EXIT_SUCCESS;
-
 }
+
+/* RESOURCES */
+
+/*
+Nth root - https://www.geeksforgeeks.org/dsa/n-th-root-number/
+*/
