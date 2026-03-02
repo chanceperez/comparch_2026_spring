@@ -8,7 +8,7 @@
 #define EXP_SZ 11
 #define FRAC_SZ 52
 
-int main(int argc, char *argv[])
+int main(int argc, char *argv[]) // Was working and now doesn't for some reason?? Confused...
 {
 
     // SETUP
@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     unsigned long int ref_bits = *(unsigned long int *)&value;
 
     // THE SIGN BIT
-    bool sign = value < 0.0;
+    bool sign = value < 0.0; // 1 if less than 0 (neg) 0 if not (pos)
     printf("%d_", sign);
     assert(sign == (1 & ref_bits >> (EXP_SZ + FRAC_SZ))); // validate your result against the reference
 
@@ -39,24 +39,29 @@ int main(int argc, char *argv[])
     // 1.0 <= fraction < 2.0
     double fraction = sign ? -value : value;
 
-    signed short trial_exp = (1 << (EXP_SZ - 1)) - 1; // start by assuming largest possible exp (before infinity)
+    signed int trial_exp = (1 << (EXP_SZ - 1)) - 1; // start by assuming largest possible exp (before infinity) //signed int bc of (maybe) over/underflow
+    if (fraction == 0)
+    {
+        printf("00000000000_0000000000000000000000000000000000000000000000000000"); // error was because I already printed sign with _
+        return 0;
+    }
+
     // do trial division until the proper exponent E is found
-    while (fraction < 1 || fraction >= 2)
+    while (fraction < 1 || fraction >= 2) // searches for the exponent through loop
     {
         if (fraction >= 2)
         {
             fraction /= 2;
-            trial_exp--;
+            trial_exp += 1; // divide by 2 increase by 1
         }
         else
         {
             fraction *= 2;
-            trial_exp++;
+            trial_exp -= 1; // double and decrease exponent
         }
     }
 
-    unsigned short bias = (1 << (EXP_SZ - 1)) - 1;
-    signed short exp = trial_exp + bias;
+    signed int exp = trial_exp;
 
     for (int exp_index = EXP_SZ - 1; 0 <= exp_index; exp_index--)
     {
@@ -75,7 +80,7 @@ int main(int argc, char *argv[])
     fraction -= 1;
 
     bool frac_array[FRAC_SZ + 1]; // one extra LSB bit for rounding
-    for (int frac_index = FRAC_SZ; 0 <= frac_index; frac_index--)
+    for (int frac_index = FRAC_SZ; frac_index >= 0; frac_index--)
     {
         frac_array[frac_index] = false; // frac set to zero to enable partial credit
         fraction *= 2;
@@ -92,17 +97,20 @@ int main(int argc, char *argv[])
         bool carry = true;
         for (int i = 1; i <= 52; i++)
         {
+            if (!carry)
+                break;
             bool newCarry = frac_array[i] && carry;
             frac_array[i] = frac_array[i] != carry;
             carry = newCarry;
         }
     }
 
-    for (int frac_index = FRAC_SZ - 1; 0 <= frac_index; frac_index--)
+    for (int frac_index = 52; frac_index >= 1; frac_index--)
     {
-        bool frac_bit = frac_array[frac_index + 1]; // skipping the extra LSB bit for rounding
+        bool frac_bit = frac_array[frac_index]; // skipping the extra LSB bit for rounding
         printf("%d", frac_bit);
-        // assert (frac_bit == (1&ref_bits>>frac_index)); // validate your result against the reference
+
+        assert(frac_bit == (1 & ref_bits >> (frac_index - 1))); // validate your result against the reference //moving this number by -1 so I can go from 52 to 1
     }
 }
 
